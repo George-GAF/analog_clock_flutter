@@ -106,42 +106,34 @@ class _MyHomePageState extends State<MyHomePage> {
           width: clockSize,
           child: Stack(
             children: [
-              ClockMark(
-                clockSize: clockSize,
-                angle: 0,
-                height: clockSize * .06,
-                width: clockSize * .03,
-              ),
-              ClockMark(
-                clockSize: clockSize,
-                angle: .5,
-                height: clockSize * .06,
-                width: clockSize * .03,
-              ),
-              ClockMark(
-                clockSize: clockSize,
-                angle: .5 / 3,
-                height: clockSize * .04,
-                width: clockSize * .02,
-              ),
-              ClockMark(
-                clockSize: clockSize,
-                angle: (.5 / 3) * 2,
-                height: clockSize * .04,
-                width: clockSize * .02,
-              ),
-              ClockMark(
-                clockSize: clockSize,
-                angle: (1 / 6) * 4,
-                height: clockSize * .04,
-                width: clockSize * .02,
-              ),
-              ClockMark(
-                clockSize: clockSize,
-                angle: (1 / 6) * 5,
-                height: clockSize * .04,
-                width: clockSize * .02,
-              ),
+              for (int i = 0; i < 30; i++)
+                ClockMark(
+                  clockSize: clockSize,
+                  angle: (1 / 30) * i,
+                  height: clockSize *
+                      (i == 0 || i == 15
+                          ? .06
+                          : i % 5 == 0
+                              ? .04
+                              : .02),
+                  width: clockSize *
+                      (i == 0 || i == 15
+                          ? .03
+                          : i % 5 == 0
+                              ? .02
+                              : .01),
+                  isNumber: false,
+                ),
+              for (int i = 1; i <= 6; i++)
+                ClockMark(
+                  clockSize: clockSize,
+                  angle: (1 / 6) * i,
+                  height: clockSize * .1,
+                  width: clockSize * .1,
+                  isNumber: true,
+                  number: '$i',
+                  number1: '${i + 6}',
+                ),
 
               //  Clockwise //
               Clockwise(
