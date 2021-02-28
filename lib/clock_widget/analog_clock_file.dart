@@ -46,12 +46,12 @@ class _AnalogClockState extends State<AnalogClock> {
         second = 0;
       }
       if (minute < 59) {
-        minute += 1 / 59;
+        minute += 1 / 60;
       } else {
         minute = 0;
       }
       if (second == 0) {
-        hour += 1 / 59;
+        hour += 1 / 60;
         if (minute == 0) {
           if (hour < 12) {
             ++hour;
