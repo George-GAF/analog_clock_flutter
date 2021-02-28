@@ -1,7 +1,6 @@
 # analog_clock
 
-A new Flutter application.
-
+Make analog Clock With Flutter just for fun
 ## Getting Started
 
 This project is a starting point for a Flutter application.
