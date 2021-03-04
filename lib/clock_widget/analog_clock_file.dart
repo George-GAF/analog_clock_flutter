@@ -7,6 +7,14 @@ import 'clock_mark.dart';
 import 'clock_wise.dart';
 
 class AnalogClock extends StatefulWidget {
+  final double clockSize;
+  final bool showController;
+  const AnalogClock({
+    Key key,
+    @required this.clockSize,
+    this.showController,
+  }) : super(key: key);
+
   @override
   _AnalogClockState createState() => _AnalogClockState();
 }
@@ -21,10 +29,14 @@ class _AnalogClockState extends State<AnalogClock> {
   double hour = 0;
   final repeatCount = 60;
   double value;
+  double clockSize;
+
+  bool showController;
 
   @override
   void initState() {
     super.initState();
+    clockSize = widget.clockSize;
     value = 2 / repeatCount;
     second = (DateTime.now().second.toDouble());
     minute = (DateTime.now().minute.toDouble());
@@ -51,16 +63,19 @@ class _AnalogClockState extends State<AnalogClock> {
         minute = 0;
       }
       if (second == 0) {
+        print('hour change by on minute');
         hour += 1 / 60;
-        if (minute == 0) {
-          if (hour < 12) {
-            ++hour;
-          } else {
-            hour = 0;
-          }
+      }
+      /*
+      if (minute == 0) {
+        print('hour change on hour');
+        if (hour < 11) {
+          ++hour;
+        } else {
+          hour = 0;
         }
       }
-
+*/
       setState(() {
         secondPI = second * value;
         minutePI = minute * value;
@@ -71,17 +86,10 @@ class _AnalogClockState extends State<AnalogClock> {
 
   @override
   Widget build(BuildContext context) {
-    // print('build  $minute');
-
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
-    final double selectedWidth = height > width ? width : height;
-    final double clockSize = selectedWidth * .8;
-
-    return Scaffold(
-      backgroundColor: Color.fromRGBO(148, 148, 254, 1),
-      body: Center(
-        child: Container(
+    showController = widget.showController;
+    return Stack(
+      children: [
+        Container(
           padding: EdgeInsets.all(
             clockSize * .01,
           ),
@@ -172,6 +180,72 @@ class _AnalogClockState extends State<AnalogClock> {
             border: Border.all(color: Colors.black87, width: clockSize * .03),
             color: Color.fromRGBO(250, 250, 250, 1),
           ),
+        ),
+        showController
+            ? Container(
+                margin: EdgeInsets.only(
+                    left: clockSize * .03, top: clockSize * .85),
+                width: clockSize * .94,
+                child: Row(
+                  // mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ChangeButton(
+                      icon: Icons.add,
+                      onClick: () {
+                        setState(() {
+                          clockSize *= 1.05;
+                        });
+                      },
+                      size: clockSize * .1,
+                    ),
+                    ChangeButton(
+                      icon: Icons.remove,
+                      onClick: () {
+                        setState(() {
+                          clockSize *= .95;
+                        });
+                      },
+                      size: clockSize * .1,
+                    ),
+                  ],
+                ),
+              )
+            : SizedBox(),
+      ],
+    );
+  }
+}
+
+class ChangeButton extends StatelessWidget {
+  final IconData icon;
+  final Function onClick;
+  final double size;
+
+  const ChangeButton({Key key, this.icon, this.onClick, this.size})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onClick,
+      child: Container(
+        width: size,
+        height: size,
+        child: Icon(
+          icon,
+          size: size * .9,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(size / 2),
+          color: Colors.blue[900],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black,
+              blurRadius: 5,
+              offset: Offset(2, 2),
+            )
+          ],
         ),
       ),
     );
